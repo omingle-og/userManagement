@@ -63,4 +63,41 @@ public class UserService {
         response.put("token", jwtToken);
         return response;
     }
+
+    public com.example.usermanagement.dto.UserResponse getCurrentUser(String username) {
+        var user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return mapToUserResponse(user);
+    }
+
+    public java.util.List<com.example.usermanagement.dto.UserResponse> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(this::mapToUserResponse)
+                .toList();
+    }
+
+    public com.example.usermanagement.dto.UserResponse updateUserRole(Long id, com.example.usermanagement.dto.RoleUpdateRequest request) {
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setRole(request.getRole());
+        userRepository.save(user);
+        return mapToUserResponse(user);
+    }
+
+    public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("User not found");
+        }
+        userRepository.deleteById(id);
+    }
+
+    private com.example.usermanagement.dto.UserResponse mapToUserResponse(User user) {
+        return com.example.usermanagement.dto.UserResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .build();
+    }
 }
