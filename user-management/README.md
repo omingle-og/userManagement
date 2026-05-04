@@ -1,99 +1,91 @@
-# User Management System
+# 🛡️ User Management API
 
-A robust backend REST API for managing users, built with **Spring Boot 3**, **MySQL**, **Hibernate/JPA**, and secured with **JWT (JSON Web Tokens)**.
+A robust, production-ready backend REST API for managing users, built with **Spring Boot 3**, **MySQL**, **Hibernate/JPA**, and secured with **JWT (JSON Web Tokens)**.
 
-## 🚀 Features
-
-- **User Registration**: Create new users with unique usernames and emails.
-- **User Authentication**: Login to receive a secure JWT token.
-- **Stateless Sessions**: Fully stateless backend using JWTs for authorization.
-- **Password Hashing**: Secure password storage using BCrypt.
-- **Interactive API Documentation**: Embedded Swagger UI for easy endpoint testing right from your browser.
-- **Validation**: Strict request payload validation.
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2.5-brightgreen.svg?logo=springboot)
+![Java](https://img.shields.io/badge/Java-17-orange.svg?logo=java)
+![MySQL](https://img.shields.io/badge/MySQL-8.0+-blue.svg?logo=mysql)
+![JWT](https://img.shields.io/badge/Security-JWT-black.svg?logo=jsonwebtokens)
+![Swagger](https://img.shields.io/badge/API_Docs-Swagger_UI-85EA2D.svg?logo=swagger)
 
 ---
 
-## 🛠️ Technology Stack
+## ✨ Features
 
-- **Java 17**
-- **Spring Boot 3.2.5** (Web, Data JPA, Security, Validation)
-- **MySQL** & **Hibernate**
-- **JWT (jjwt)**
-- **Lombok** (Boilerplate reduction)
-- **Springdoc OpenAPI / Swagger UI**
-- **Maven**
-
----
-
-## 📋 Prerequisites
-
-Before you begin, ensure you have the following installed:
-1. **Java 17** (or higher)
-2. **MySQL Server** (running on default port 3306)
+- 🔐 **Secure Authentication**: Fully stateless backend using JWTs for authorization.
+- 👤 **User Registration**: Create new users with unique usernames and emails.
+- 🔑 **Password Hashing**: Secure password storage using BCrypt.
+- 🛠️ **Environment Variables**: Configuration via `.env` files for security and flexibility.
+- 📚 **Interactive API Documentation**: Embedded Swagger UI for easy endpoint testing right from your browser.
+- 🛡️ **Validation**: Strict request payload validation using Jakarta Validation.
 
 ---
 
-## ⚙️ Configuration
+## 🏗️ Technology Stack
 
-1. **Database Setup**:
-   The application expects a MySQL database named `management`. 
-   If you haven't created it yet, log into your MySQL server and run:
-   ```sql
-   CREATE DATABASE IF NOT EXISTS management;
-   ```
-
-2. **Application Properties**:
-   By default, the application is configured to connect to MySQL using the username `root` and password `root123`.
-   If your MySQL credentials differ, update the following lines in `src/main/resources/application.properties`:
-   ```properties
-   spring.datasource.username=root
-   spring.datasource.password=root123
-   ```
-
-3. **JWT Secret**:
-   The JWT secret key and expiration time are configured in `application.properties`:
-   ```properties
-   jwt.secret=4f7b60e9d4a8f9c2a5d8b7c6e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5
-   jwt.expiration=86400000 # (24 hours)
-   ```
+- **Core**: Java 17, Spring Boot 3.2.5
+- **Data Access**: Spring Data JPA, Hibernate, MySQL Connector
+- **Security**: Spring Security, jjwt (JSON Web Token)
+- **Tooling**: Lombok (Boilerplate reduction), Maven Wrapper (`mvnw`)
+- **Documentation**: Springdoc OpenAPI (Swagger UI)
 
 ---
 
-## 🏃‍♂️ How to Run
+## 🚀 Getting Started
 
-You do not need Maven installed globally; the project includes a Maven Wrapper (`mvnw`).
+### 1️⃣ Prerequisites
+Ensure you have the following installed:
+- **Java 17** (or higher)
+- **MySQL Server** (running on default port 3306)
 
-Open a terminal in the root directory of the project (`user-management`) and run:
+### 2️⃣ Database Setup
+The application requires a MySQL database named `management`. Log into your MySQL server and execute:
+```sql
+CREATE DATABASE IF NOT EXISTS management;
+```
+*(Note: Hibernate will automatically create the `users` table for you upon startup!)*
+
+### 3️⃣ Environment Configuration
+Create a `.env` file in the root directory (next to `pom.xml`) to securely configure your database and JWT secrets:
+```env
+DB_URL=jdbc:mysql://localhost:3306/management?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+DB_USERNAME=root
+DB_PASSWORD=root123
+JWT_SECRET=4f7b60e9d4a8f9c2a5d8b7c6e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5
+JWT_EXPIRATION=86400000
+```
+*(If no `.env` file is provided, the application will safely fallback to the default values).*
+
+### 4️⃣ Run the Application
+You don't need Maven installed globally. Use the included Maven Wrapper to start the server!
 
 **On Linux/Mac:**
 ```bash
 ./mvnw clean spring-boot:run
 ```
-
 **On Windows:**
 ```cmd
 mvnw.cmd clean spring-boot:run
 ```
-
-The server will start on `http://localhost:8080`.
+The server will boot up on `http://localhost:8080`.
 
 ---
 
-## 📖 API Documentation & Testing (Swagger UI)
+## 📖 API Documentation (Swagger UI)
 
-The easiest way to test the API is using the built-in Swagger UI. Once the server is running, open your web browser and navigate to:
+The easiest way to test the API is using the built-in Swagger UI. Once the server is running, simply open your web browser and navigate to:
 
 👉 **[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)**
 
-From here, you can visually explore the endpoints, construct JSON payloads, and execute requests.
+From this dashboard, you can visually explore the available endpoints, construct JSON payloads, and execute requests with a single click.
 
 ---
 
 ## 💻 CLI / cURL Examples
 
-If you prefer testing via terminal, here are the `cURL` commands:
+If you prefer testing via terminal, here are the raw `cURL` commands:
 
-### 1. Register a new user
+### 📝 Register a new user
 ```bash
 curl -X POST http://localhost:8080/api/auth/register \
      -H "Content-Type: application/json" \
@@ -104,7 +96,7 @@ curl -X POST http://localhost:8080/api/auth/register \
          }'
 ```
 
-### 2. Login
+### 🔓 Login
 ```bash
 curl -X POST http://localhost:8080/api/auth/login \
      -H "Content-Type: application/json" \
@@ -119,13 +111,19 @@ curl -X POST http://localhost:8080/api/auth/login \
 
 ## 📁 Project Structure
 
-```
-src/main/java/com/example/usermanagement/
-├── controller/        # REST endpoints (UserController)
-├── dto/               # Data Transfer Objects (LoginRequest, RegisterRequest)
-├── entity/            # JPA Domain Models (User, Role)
-├── repository/        # Spring Data JPA Interfaces (UserRepository)
-├── security/          # Security & JWT logic (JwtFilter, JwtUtil, SecurityConfig)
-├── service/           # Business Logic (UserService)
-└── UserManagementApplication.java # Application Runner
+```text
+user-management/
+├── src/main/java/com/example/usermanagement/
+│   ├── controller/        # REST endpoints (UserController)
+│   ├── dto/               # Data Transfer Objects (LoginRequest, RegisterRequest)
+│   ├── entity/            # JPA Domain Models (User, Role)
+│   ├── repository/        # Spring Data JPA Interfaces (UserRepository)
+│   ├── security/          # Security & JWT logic (JwtFilter, JwtUtil, SecurityConfig, ApplicationConfig)
+│   ├── service/           # Business Logic (UserService)
+│   └── UserManagementApplication.java # Application Runner
+├── src/main/resources/
+│   └── application.properties # Fallback configurations
+├── .env                   # Environment variables (ignored by Git)
+├── .gitignore             # Git ignore rules
+└── pom.xml                # Maven dependencies
 ```
